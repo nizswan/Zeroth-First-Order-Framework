@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "status": "complete",
+  "tasks": [
+    "sphere",
+    "ill_conditioned",
+    "nonlinear_lse",
+    "logistic",
+    "matrix_factorization",
+    "rosenbrock",
+    "beale",
+    "rastrigin",
+    "noisy_regression",
+    "moons",
+    "xor",
+    "noisy_labels"
+  ],
+  "steps": 100,
+  "tuning_seeds": [
+    100,
+    101,
+    102
+  ],
+  "report_seeds": [
+    200,
+    201,
+    202
+  ],
+  "lr_grids": {
+    "SGD": [
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "Adam": [
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "Muon": [
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ]
+  },
+  "beta": 3,
+  "epsilon": 0.001,
+  "interior_search": "true",
+  "dtype": "float64",
+  "device": "cpu",
+  "threads": 1,
+  "torch": "2.11.0",
+  "python": "3.12.12",
+  "numpy": "2.3.5",
+  "pandas": "3.0.3",
+  "platform": "macOS-26.6.1-arm64-arm-64bit",
+  "git_head": "25260a453b22dd0a8043efae08c09a22fae1eaa0",
+  "source_sha256": {
+    "zfo.py": "180e4f83d77be88681632e4b1d13b59ebdd5f3fe0b7c12782a659633072a5712",
+    "ZFO/_search.py": "d2ebe40641b04d0789bbe21dc8841da265ed099aefda13fd9e02953d94494265",
+    "ZFO/optimizer.py": "d945cde774f80d3b6c453b9eebc6763fa34c8a66d3762fbdcbdbb6bb71c896d7",
+    "benchmarks/tasks.py": "ddefb6a55cb5802216a474c13d3148981a20a1994122abfaac033c5e94c80713",
+    "benchmarks/suite.py": "5217dfd774bd918c7b2e2fc82c341fff1683d7f72e65e238d448c95a040d459c"
+  },
+  "work_proxy": "training forwards + 2 * backwards; excludes monitoring; not FLOPs",
+  "seed_unit": "problem/data realization + initialization + minibatch order",
+  "muon": "native torch Muon, every 2D tensor incl. augmented bias columns; rank-one matrices on vector tasks",
+  "selection": "lowest mean final validation across tuning seeds, all seeds must finish; ties choose smaller LR",
+  "elapsed_seconds": 173.48379270799342,
+  "tuning_runs": 3780,
+  "report_runs": 540
+}

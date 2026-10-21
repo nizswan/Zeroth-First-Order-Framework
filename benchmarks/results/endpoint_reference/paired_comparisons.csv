@@ -1,0 +1,145 @@
+Task,Base,ZFO,Better / tied / worse,Nonfinite pairs,Paired Δ loss ± SD
+Isotropic quadratic,SGD,Taylor2,0 / 3 / 0,0,9.07e-16 ± 1.3e-15
+Isotropic quadratic,SGD,Taylor3,0 / 3 / 0,0,1.121e-39 ± 9.7e-40
+Isotropic quadratic,SGD,Padé2,0 / 3 / 0,0,2.974e-13 ± 4.4e-14
+Isotropic quadratic,SGD,Padé3,0 / 3 / 0,0,2.974e-13 ± 4.4e-14
+Isotropic quadratic,Adam,Taylor2,3 / 0 / 0,0,-0.0001537 ± 0.00013
+Isotropic quadratic,Adam,Taylor3,3 / 0 / 0,0,-0.0001537 ± 0.00013
+Isotropic quadratic,Adam,Padé2,2 / 0 / 1,0,-7.886e-05 ± 0.00015
+Isotropic quadratic,Adam,Padé3,3 / 0 / 0,0,-0.000129 ± 0.00011
+Isotropic quadratic,Muon,Taylor2,3 / 0 / 0,0,-0.06613 ± 0.094
+Isotropic quadratic,Muon,Taylor3,3 / 0 / 0,0,-0.06613 ± 0.094
+Isotropic quadratic,Muon,Padé2,2 / 0 / 1,0,-0.05588 ± 0.092
+Isotropic quadratic,Muon,Padé3,3 / 0 / 0,0,-0.05731 ± 0.091
+Ill-conditioned least squares,SGD,Taylor2,3 / 0 / 0,0,-0.003355 ± 0.0032
+Ill-conditioned least squares,SGD,Taylor3,3 / 0 / 0,0,-0.003355 ± 0.0032
+Ill-conditioned least squares,SGD,Padé2,0 / 0 / 3,0,0.008565 ± 0.0073
+Ill-conditioned least squares,SGD,Padé3,0 / 0 / 3,0,0.005138 ± 0.0032
+Ill-conditioned least squares,Adam,Taylor2,3 / 0 / 0,0,-0.0002803 ± 0.00018
+Ill-conditioned least squares,Adam,Taylor3,3 / 0 / 0,0,-0.0002911 ± 0.0002
+Ill-conditioned least squares,Adam,Padé2,1 / 0 / 2,0,0.0003289 ± 0.00055
+Ill-conditioned least squares,Adam,Padé3,0 / 0 / 3,0,0.0008815 ± 0.00011
+Ill-conditioned least squares,Muon,Taylor2,3 / 0 / 0,0,-0.01281 ± 0.014
+Ill-conditioned least squares,Muon,Taylor3,3 / 0 / 0,0,-0.01281 ± 0.014
+Ill-conditioned least squares,Muon,Padé2,3 / 0 / 0,0,-0.009085 ± 0.013
+Ill-conditioned least squares,Muon,Padé3,3 / 0 / 0,0,-0.01014 ± 0.015
+Exponential curve fitting,SGD,Taylor2,0 / 0 / 3,0,0.01257 ± 0.0039
+Exponential curve fitting,SGD,Taylor3,0 / 0 / 3,0,0.01312 ± 0.0058
+Exponential curve fitting,SGD,Padé2,0 / 0 / 3,0,0.01312 ± 0.0058
+Exponential curve fitting,SGD,Padé3,0 / 0 / 3,0,0.01312 ± 0.0058
+Exponential curve fitting,Adam,Taylor2,3 / 0 / 0,0,-0.02125 ± 0.0027
+Exponential curve fitting,Adam,Taylor3,3 / 0 / 0,0,-0.01819 ± 0.0025
+Exponential curve fitting,Adam,Padé2,3 / 0 / 0,0,-0.02289 ± 0.008
+Exponential curve fitting,Adam,Padé3,3 / 0 / 0,0,-0.01682 ± 0.0017
+Exponential curve fitting,Muon,Taylor2,3 / 0 / 0,0,-0.02883 ± 0.018
+Exponential curve fitting,Muon,Taylor3,3 / 0 / 0,0,-0.03815 ± 0.019
+Exponential curve fitting,Muon,Padé2,3 / 0 / 0,0,-0.02011 ± 0.018
+Exponential curve fitting,Muon,Padé3,3 / 0 / 0,0,-0.0236 ± 0.019
+Logistic regression,SGD,Taylor2,0 / 1 / 2,0,0.008077 ± 0.0085
+Logistic regression,SGD,Taylor3,0 / 1 / 2,0,0.008077 ± 0.0085
+Logistic regression,SGD,Padé2,0 / 1 / 2,0,0.008079 ± 0.0085
+Logistic regression,SGD,Padé3,0 / 1 / 2,0,0.008079 ± 0.0085
+Logistic regression,Adam,Taylor2,0 / 3 / 0,0,-0.001065 ± 0.0033
+Logistic regression,Adam,Taylor3,0 / 3 / 0,0,-0.001065 ± 0.0033
+Logistic regression,Adam,Padé2,1 / 0 / 2,0,0.00544 ± 0.019
+Logistic regression,Adam,Padé3,0 / 3 / 0,0,-0.001069 ± 0.0033
+Logistic regression,Muon,Taylor2,3 / 0 / 0,0,-0.02931 ± 0.0076
+Logistic regression,Muon,Taylor3,3 / 0 / 0,0,-0.02931 ± 0.0076
+Logistic regression,Muon,Padé2,3 / 0 / 0,0,-0.02931 ± 0.0076
+Logistic regression,Muon,Padé3,3 / 0 / 0,0,-0.02931 ± 0.0076
+Low-rank matrix factorization,SGD,Taylor2,0 / 3 / 0,0,-2.982e-09 ± 5.2e-09
+Low-rank matrix factorization,SGD,Taylor3,0 / 3 / 0,0,-2.982e-09 ± 5.2e-09
+Low-rank matrix factorization,SGD,Padé2,0 / 1 / 1,1,failed / incomplete
+Low-rank matrix factorization,SGD,Padé3,0 / 1 / 1,1,failed / incomplete
+Low-rank matrix factorization,Adam,Taylor2,3 / 0 / 0,0,-2.974e-06 ± 2e-06
+Low-rank matrix factorization,Adam,Taylor3,3 / 0 / 0,0,-2.959e-06 ± 2e-06
+Low-rank matrix factorization,Adam,Padé2,0 / 0 / 3,0,9.303e-06 ± 6.5e-06
+Low-rank matrix factorization,Adam,Padé3,0 / 0 / 3,0,9.472e-06 ± 6.4e-06
+Low-rank matrix factorization,Muon,Taylor2,3 / 0 / 0,0,-0.0002207 ± 0.00011
+Low-rank matrix factorization,Muon,Taylor3,3 / 0 / 0,0,-0.00022 ± 0.00011
+Low-rank matrix factorization,Muon,Padé2,0 / 0 / 3,0,0.002568 ± 0.0022
+Low-rank matrix factorization,Muon,Padé3,0 / 0 / 3,0,0.001841 ± 0.00079
+Rosenbrock valley,SGD,Taylor2,3 / 0 / 0,0,-2.404 ± 1.6
+Rosenbrock valley,SGD,Taylor3,3 / 0 / 0,0,-0.4562 ± 0.1
+Rosenbrock valley,SGD,Padé2,3 / 0 / 0,0,-3.124 ± 1.2
+Rosenbrock valley,SGD,Padé3,3 / 0 / 0,0,-3.145 ± 1.2
+Rosenbrock valley,Adam,Taylor2,3 / 0 / 0,0,-0.324 ± 0.33
+Rosenbrock valley,Adam,Taylor3,3 / 0 / 0,0,-0.0916 ± 0.1
+Rosenbrock valley,Adam,Padé2,0 / 0 / 3,0,0.6149 ± 0.51
+Rosenbrock valley,Adam,Padé3,0 / 0 / 3,0,1.427 ± 0.74
+Rosenbrock valley,Muon,Taylor2,3 / 0 / 0,0,-1.193 ± 0.2
+Rosenbrock valley,Muon,Taylor3,3 / 0 / 0,0,-1.207 ± 0.21
+Rosenbrock valley,Muon,Padé2,3 / 0 / 0,0,-0.7858 ± 0.21
+Rosenbrock valley,Muon,Padé3,0 / 0 / 3,0,2.784 ± 0.2
+Beale surface,SGD,Taylor2,3 / 0 / 0,0,-0.2301 ± 0.022
+Beale surface,SGD,Taylor3,3 / 0 / 0,0,-0.983 ± 0.72
+Beale surface,SGD,Padé2,2 / 0 / 0,1,failed / incomplete
+Beale surface,SGD,Padé3,2 / 0 / 1,0,-0.8681 ± 0.92
+Beale surface,Adam,Taylor2,0 / 0 / 3,0,0.7977 ± 0.05
+Beale surface,Adam,Taylor3,2 / 0 / 1,0,0.2734 ± 0.49
+Beale surface,Adam,Padé2,0 / 0 / 3,0,0.8944 ± 0.0017
+Beale surface,Adam,Padé3,0 / 0 / 3,0,1.33 ± 0.44
+Beale surface,Muon,Taylor2,3 / 0 / 0,0,-0.4006 ± 0.074
+Beale surface,Muon,Taylor3,3 / 0 / 0,0,-0.3808 ± 0.086
+Beale surface,Muon,Padé2,2 / 1 / 0,0,-0.06178 ± 0.08
+Beale surface,Muon,Padé3,3 / 0 / 0,0,-0.4029 ± 0.047
+Rastrigin landscape,SGD,Taylor2,0 / 3 / 0,0,9.474e-15 ± 4.1e-15
+Rastrigin landscape,SGD,Taylor3,0 / 3 / 0,0,4.737e-15 ± 4.1e-15
+Rastrigin landscape,SGD,Padé2,0 / 3 / 0,0,1.184e-14 ± 4.1e-15
+Rastrigin landscape,SGD,Padé3,0 / 3 / 0,0,1.184e-14 ± 4.1e-15
+Rastrigin landscape,Adam,Taylor2,0 / 3 / 0,0,-0.0004196 ± 0.00049
+Rastrigin landscape,Adam,Taylor3,0 / 3 / 0,0,-0.0004261 ± 0.00048
+Rastrigin landscape,Adam,Padé2,0 / 3 / 0,0,0.000447 ± 0.00076
+Rastrigin landscape,Adam,Padé3,0 / 3 / 0,0,-0.000144 ± 0.00011
+Rastrigin landscape,Muon,Taylor2,1 / 2 / 0,0,-0.08266 ± 0.14
+Rastrigin landscape,Muon,Taylor3,1 / 2 / 0,0,-0.08266 ± 0.14
+Rastrigin landscape,Muon,Padé2,0 / 3 / 0,0,0.01259 ± 0.13
+Rastrigin landscape,Muon,Padé3,0 / 0 / 3,0,0.5783 ± 0.15
+Minibatch noisy regression,SGD,Taylor2,3 / 0 / 0,0,-0.02937 ± 0.0092
+Minibatch noisy regression,SGD,Taylor3,3 / 0 / 0,0,-0.02937 ± 0.0092
+Minibatch noisy regression,SGD,Padé2,3 / 0 / 0,0,-0.02937 ± 0.0092
+Minibatch noisy regression,SGD,Padé3,3 / 0 / 0,0,-0.02925 ± 0.009
+Minibatch noisy regression,Adam,Taylor2,2 / 0 / 1,0,-0.003859 ± 0.012
+Minibatch noisy regression,Adam,Taylor3,2 / 0 / 1,0,-0.003859 ± 0.012
+Minibatch noisy regression,Adam,Padé2,2 / 0 / 1,0,-0.004154 ± 0.012
+Minibatch noisy regression,Adam,Padé3,2 / 0 / 1,0,-0.003647 ± 0.012
+Minibatch noisy regression,Muon,Taylor2,0 / 1 / 2,0,0.03278 ± 0.039
+Minibatch noisy regression,Muon,Taylor3,0 / 1 / 2,0,0.03278 ± 0.039
+Minibatch noisy regression,Muon,Padé2,1 / 0 / 2,0,0.03033 ± 0.041
+Minibatch noisy regression,Muon,Padé3,0 / 0 / 3,0,0.03436 ± 0.037
+Two moons · tanh MLP,SGD,Taylor2,3 / 0 / 0,0,-0.1874 ± 0.052
+Two moons · tanh MLP,SGD,Taylor3,3 / 0 / 0,0,-0.1317 ± 0.046
+Two moons · tanh MLP,SGD,Padé2,3 / 0 / 0,0,-0.1547 ± 0.042
+Two moons · tanh MLP,SGD,Padé3,0 / 0 / 3,0,0.1289 ± 0.086
+Two moons · tanh MLP,Adam,Taylor2,1 / 0 / 2,0,0.001903 ± 0.0079
+Two moons · tanh MLP,Adam,Taylor3,1 / 0 / 2,0,0.001974 ± 0.0076
+Two moons · tanh MLP,Adam,Padé2,3 / 0 / 0,0,-0.003737 ± 0.0025
+Two moons · tanh MLP,Adam,Padé3,2 / 0 / 1,0,0.0267 ± 0.057
+Two moons · tanh MLP,Muon,Taylor2,3 / 0 / 0,0,-0.07467 ± 0.01
+Two moons · tanh MLP,Muon,Taylor3,3 / 0 / 0,0,-0.07442 ± 0.011
+Two moons · tanh MLP,Muon,Padé2,3 / 0 / 0,0,-0.0752 ± 0.021
+Two moons · tanh MLP,Muon,Padé3,2 / 0 / 1,0,-0.04156 ± 0.069
+XOR · ReLU MLP,SGD,Taylor2,3 / 0 / 0,0,-0.053 ± 0.009
+XOR · ReLU MLP,SGD,Taylor3,3 / 0 / 0,0,-0.0347 ± 0.0019
+XOR · ReLU MLP,SGD,Padé2,2 / 0 / 1,0,-0.01381 ± 0.016
+XOR · ReLU MLP,SGD,Padé3,0 / 0 / 3,0,0.1286 ± 0.016
+XOR · ReLU MLP,Adam,Taylor2,0 / 0 / 3,0,0.03707 ± 0.0047
+XOR · ReLU MLP,Adam,Taylor3,0 / 0 / 3,0,0.04082 ± 0.0054
+XOR · ReLU MLP,Adam,Padé2,0 / 0 / 3,0,0.03707 ± 0.0047
+XOR · ReLU MLP,Adam,Padé3,0 / 0 / 3,0,0.008724 ± 0.0097
+XOR · ReLU MLP,Muon,Taylor2,2 / 0 / 1,0,-0.007081 ± 0.016
+XOR · ReLU MLP,Muon,Taylor3,2 / 0 / 1,0,-0.007407 ± 0.023
+XOR · ReLU MLP,Muon,Padé2,1 / 0 / 2,0,0.02514 ± 0.041
+XOR · ReLU MLP,Muon,Padé3,2 / 0 / 1,0,-0.002502 ± 0.022
+Moons · 30% label noise,SGD,Taylor2,2 / 0 / 1,0,0.0006614 ± 0.029
+Moons · 30% label noise,SGD,Taylor3,2 / 0 / 1,0,0.0006614 ± 0.029
+Moons · 30% label noise,SGD,Padé2,2 / 0 / 1,0,0.0006614 ± 0.029
+Moons · 30% label noise,SGD,Padé3,2 / 0 / 1,0,0.0006614 ± 0.029
+Moons · 30% label noise,Adam,Taylor2,1 / 0 / 2,0,-0.3137 ± 0.67
+Moons · 30% label noise,Adam,Taylor3,1 / 0 / 2,0,-0.3049 ± 0.58
+Moons · 30% label noise,Adam,Padé2,2 / 0 / 1,0,-0.2967 ± 0.66
+Moons · 30% label noise,Adam,Padé3,1 / 0 / 2,0,-0.3379 ± 0.66
+Moons · 30% label noise,Muon,Taylor2,3 / 0 / 0,0,-0.2078 ± 0.079
+Moons · 30% label noise,Muon,Taylor3,3 / 0 / 0,0,-0.1741 ± 0.16
+Moons · 30% label noise,Muon,Padé2,3 / 0 / 0,0,-0.2274 ± 0.05
+Moons · 30% label noise,Muon,Padé3,3 / 0 / 0,0,-0.1764 ± 0.07

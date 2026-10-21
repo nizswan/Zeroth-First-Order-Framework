@@ -54,28 +54,123 @@ interactive playground to compare Taylor and Padé fits.
 
 ---
 
-## Experiment package
+## Reusable PyTorch library
+
+ZFO selects a step along an optimizer's proposed direction using Taylor or Padé
+models and two symmetric objective probes. This repository now includes a
+reusable PyTorch adapter, a twelve-problem benchmark atlas, and a GitHub Pages
+site alongside the original large-model experiment runner.
+
+| Start here | What you get |
+| --- | --- |
+| [Library guide](docs/library.md) | `from ZFO import ZFO`, supervised training, schedulers, checkpoints, and limitations |
+| [Complete example](examples/supervised.py) | A small supervised regression run with Adam + ZFO |
+| [Benchmark notebook](notebooks/benchmark_atlas.ipynb) | Repeated explanation → table → plots, including weak and unstable cases |
+| [Benchmark protocol](benchmarks/README.md) | Independent LR scans, disjoint seed cohorts, raw evidence, and cost accounting |
+| [Reference findings](benchmarks/FINDINGS.md) | Concrete examples of gains, regressions, failures, and compute tradeoffs |
+| [Website](https://nizswan.github.io/Zeroth-First-Order-Framework/) | Configuration builder and interactive function playground |
+| [Original CLI reference](#usage-and-hyperparameters) | The paper-oriented LLM runner and reproduction settings |
+
+## Install the library
+
+Requires Python 3.10+ and PyTorch 2.9+. Install directly from GitHub:
+
+```bash
+python -m pip install "git+https://github.com/nizswan/Zeroth-First-Order-Framework.git"
+```
+
+For the examples, tests, and benchmark tools, use a checkout:
+
+```bash
+git clone https://github.com/nizswan/Zeroth-First-Order-Framework.git
+cd Zeroth-First-Order-Framework
+python -m pip install -e .
+python examples/supervised.py
+```
+
+```python
+from ZFO import ZFO
+
+# model, optimizer, inputs, targets, and loss_fn come from your training loop.
+zfo = ZFO(optimizer, model=model, epsilon=1e-3, method="taylor2",
+          interior_search="auto", beta=1.0)
+loss = zfo.step(lambda: loss_fn(model(inputs), targets))
+```
+
+The closure returns a scalar loss; ZFO owns zeroing gradients and backward.
+Attach any ordinary LR scheduler to the **base optimizer**, then call it after
+`zfo.step`. Batch size, datasets, epochs, and model architecture stay outside
+the adapter. The optional `lr=` overrides base group rates; omitting it preserves
+them. `import ZFO` and `ZFO.ZFO(...)` also work.
+
+This reference adapter supports single-device float32/float64 training and
+includes all five local models:
+
+| `method` | Local model |
+| --- | --- |
+| `taylor2` | Quadratic Taylor |
+| `taylor3` | Cubic Taylor |
+| `pade2` | Padé [1/1] |
+| `pade3` | Padé [1/2], the original experiment variant |
+| `pade3_21` | Padé [2/1], the additional library variant |
+
+Both cubic Padé variants use the same two probes. Set `interior_search=True`
+to include valid stationary points as well as endpoints. For example:
+
+```bash
+python examples/supervised.py --optimizer AdamW --method pade3_21 --interior-search true --beta 3
+```
+
+SGD, Adam, AdamW, matrix-only Muon, and the included matrix-only TACO adapter
+are covered by the library tests. The wrapper does not provide a monotonic-loss
+guarantee, AMP/distributed integration, or a hybrid Muon optimizer. See the
+[API guide](docs/library.md) before adopting it in a larger trainer.
+
+## Explore the evidence
+
+```bash
+python -m pip install -e '.[bench,test]'
+python -m pytest -q
+python -m benchmarks.suite --output benchmarks/results/my_run --steps 100 --seeds 3
+python -m benchmarks.report benchmarks/results/my_run --site docs
+python -m benchmarks.make_notebook --results benchmarks/results/my_run
+python -m http.server 8765 --directory docs
+```
+
+The completed reference run covers SGD, Adam, and Muon × flat LR plus four ZFO
+variants, with three tuning seeds and three distinct reporting seeds. Flat
+baselines receive a denser 13-rate sweep; each ZFO variant retains seven rates,
+with beta fixed at 3. Both grids span 1e-5 to 10. These
+atlas runs explicitly enable `interior_search=True`, including Padé3 interior
+stationary points; the original RLVR auto setting remains separate. These
+small CPU experiments are exploratory. Selected grid boundaries, divergence,
+and extra forward cost are explicit; the notebook does not claim a universal
+winner. The [Pages instructions](docs/README.md) explain site deployment.
+
+## Original LLM experiment package
 
 A self-contained command-line package for the large-model experiments: four ZFO
 local models, AdamW, AdamW with cosine decay, Prodigy, MeZO, ZFO-Seq, and Muon.
-The distribution contains six files:
+The original reproduction path consists of these files:
 
 | File | Purpose |
 | --- | --- |
 | `run.py` | Configuration, paper grids, training, evaluation, local logging, aggregation |
-| `zfo.py` | Taylor/Padé models, search coordinates, safeguards, parameter updates |
+| `zfo.py` | Taylor/Padé models, step selection, safeguards, parameter updates |
+| `ZFO/_search.py` | Shared mathematical selectors, imported by both the library and legacy driver |
 | `baselines.py` | Optimizers, cosine schedule, MeZO, sequential ZFO refinement |
 | `prep.py` | Models, datasets, prompts, reward functions, split snapshots |
 | `requirements.txt` | Pinned Python package dependencies |
 | `README.md` | Complete option reference, reproduction commands, implementation notes |
 
-No account-specific tracker, remote experiment dashboard, source-tree dependency,
-or repository checkout is required. All results are written locally.
+No account-specific tracker or remote experiment dashboard is required. Keep
+`ZFO/` alongside the original scripts (or install the library). All results are
+written locally; the mathematical selectors are shared by both entry points.
 
 ## Usage and hyperparameters
 
-The command-line spelling uses underscores. Both `--search_type=value` and
-`--search_type value` work. Inspect the fully resolved settings before a run:
+The command-line spelling uses underscores. Both `--method=value` and
+`--method value` work. Inspect the fully resolved settings before a run:
 
 ```bash
 python run.py --preset qwen_gsm8k --method pade3 --dry_run
@@ -109,29 +204,37 @@ AdamW rate. All methods here use full parameter training and the GRPO policy.
 There is no quantization, adapter training, gradient clipping, or gradient
 accumulation in the FO/ZFO reproduction path.
 
-### Search coordinates: `search_type`
+### Search interval and the roles of `lr` and `bound`
 
-Let `theta_hat` be the tentative optimizer parameters, `d = theta_hat - theta`,
-`eta` the optimizer learning rate, and `beta = bound`.
+Let `theta_hat` be the tentative optimizer parameters and
+`d = theta_hat - theta` the realized displacement. ZFO selects a multiplier
+`a` in `[0, beta]`, where `beta = bound`, and applies `theta + a*d`.
+The physical search radius is **`R = beta*||d||`**. This is the convention used
+in the large-model experiments (Appendix C.1.1).
 
-| Value | Search variable and interval | Physical update |
-| --- | --- | --- |
-| `optimizer_displacement` **(default)** | Multiplier `a` in `[0, beta]` | `theta + a*d` |
-| `normalized_direction` | Distance `s` in `[0, R]`, `R = beta*eta*||g||`, `g = d/eta` | `theta + s*(d/||d||)` |
+For nonzero `d`, writing `s = a*||d||` gives the equivalent expression
+`theta + s*(d/||d||)`, with `s` in `[0, R]`. This is a change of units for
+one interval; the implementation uses multiplier coordinates throughout.
 
-The default is the implemented large-model experiment convention from Appendix
-C.1.1. The second is the normalized representation in the methodology. Since
-`g` is the **optimizer-processed direction**, `eta*||g|| = ||d||`: these describe
-the same physical interval in exact arithmetic. The normalized option fits and
-maximizes in distance coordinates. Absolute numerical thresholds and floating
-point arithmetic can therefore change decisions. It is an alternate experiment,
-not the setting to select for reproducing the reported numbers.
+The learning rate `alpha = lr` enters when the base optimizer constructs `d`;
+`beta` scales the search interval afterward. At a fixed parameter, gradient,
+and optimizer state, if the update is `d(alpha) = alpha*u` with `u` independent
+of `alpha`, equal products `alpha*beta` give the same physical interval in
+exact arithmetic. They need not do so in finite precision: storing the
+tentative parameters and subtracting the originals can round different
+coordinates differently, especially in BF16/FP16. Scaling the resulting `d`
+with `beta` cannot recover a component already rounded away. This mechanism
+is not specific to AdamW, and normalizing the realized displacement does not
+remove it. It is a possible source of matched-product differences, not proof
+that rounding alone explains all differences between training runs. Absolute
+selector thresholds, probe arithmetic, and diverging training states can also
+affect the selected step.
 
-For either representation, `perturbation_scale` is the physical probe distance
-`epsilon`: probes use multipliers `+epsilon/||d||` and `-epsilon/||d||`.
-Probes can lie outside the nonnegative search interval. The final selected
-multiplier remains in `[0, bound]`. Optimizer moments advance on each tentative
-update even when the selected multiplier is zero.
+`perturbation_scale` is the physical probe distance `epsilon`: probes use
+multipliers `+epsilon/||d||` and `-epsilon/||d||`. Probes can lie outside the
+nonnegative search interval. The selected multiplier remains in `[0, bound]`.
+Optimizer moments advance on each tentative update even when the selected
+multiplier is zero.
 
 ### Interior candidates: `search_inside`
 
@@ -144,7 +247,6 @@ update even when the selected multiplier is zero.
 ```bash
 python run.py --preset qwen_svamp --method pade3 --search_inside=true
 python run.py --preset qwen_svamp --method taylor3 --search_inside=false
-python run.py --preset qwen_svamp --method taylor2 --search_type=normalized_direction
 ```
 
 The main LLM Padé3 experiments used endpoint selection (`search_inside=auto`), with interior steps possible only through the quadratic fallback triggered by poles or other numerical safeguards.
@@ -216,7 +318,6 @@ the environment. Tokens are not written to manifests.
 | `--lr` | `5e-6` | AdamW learning rate; MeZO update rate; auxiliary AdamW rate for Muon. Preset dependent. Prodigy uses `prodigy_lr` instead. |
 | `--bound` | `10` | Dimensionless upper multiplier `beta`; preset/method dependent; unused by plain optimizers and MeZO |
 | `--perturbation_scale` | `1e-3` | ZFO physical probe distance; MeZO unnormalized Gaussian perturbation scale |
-| `--search_type` | `optimizer_displacement` | Coordinate system described above |
 | `--search_inside` | `auto` | Candidate policy described above |
 | `--beta1`, `--beta2` | `0.9`, `0.999` | AdamW and Prodigy moment coefficients |
 | `--adam_eps` | `1e-8` | AdamW and Prodigy denominator epsilon |
@@ -468,7 +569,8 @@ The training and evaluation implementation has the following properties:
    restoration also inherits finite-precision rounding.
 5. Padé3 has pole and near-pole checks with quadratic fallback. Padé2 retains
    the original endpoint denominator handling rather than introducing a new
-   interval-wide pole safeguard. Thresholds remain coordinate dependent.
+   interval-wide pole safeguard. The original absolute thresholds are retained in multiplier coordinates;
+   they are not guaranteed to be invariant under rescaling.
 6. The selected configurations are transcribed from the paper and checked
    against available launchers, not reconstructed from a complete immutable
    manifest of the exact three runs behind every published cell. The Qwen/MATH
@@ -483,8 +585,8 @@ that certification.
 
 ### Validation
 
-The package includes `--self_test` for data partitioning, endpoints, interior roots, equivalent
-physical probe coordinates, the sequential budget, cosine scheduling, and grid
+The package includes `--self_test` for data partitioning, endpoints, interior roots, physical
+probe spacing and search radius, the sequential budget, cosine scheduling, and grid
 sizes. Additional packaging checks compare scalar selectors, prompts, verifiers,
 schedules and generation against the supplied source, and exercise tiny local
 training runs for every method. Forty-eight checks passed, including exact final

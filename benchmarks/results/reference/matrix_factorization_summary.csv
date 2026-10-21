@@ -1,0 +1,16 @@
+Base,Selector,LR,Final loss ± SD,Equal-work loss ± SD,Equal-work failed seeds,Failed seeds,Grid edge
+SGD,Flat LR,10.0,2.982e-09 ± 5.2e-09,2.982e-09 ± 5.2e-09,0,0,True
+SGD,Taylor2,10.0,5.688e-13 ± 4.1e-13,5.688e-13 ± 4.1e-13,0,0,True
+SGD,Taylor3,10.0,5.646e-13 ± 4.6e-13,5.646e-13 ± 4.6e-13,0,0,True
+SGD,Padé2,10.0,failed / incomplete,failed / incomplete,1,1,True
+SGD,Padé3,10.0,1.869 ± 3.2,0.6177 ± 1.1,0,0,True
+Adam,Flat LR,0.1,4.018e-06 ± 2.6e-06,4.018e-06 ± 2.6e-06,0,0,False
+Adam,Taylor2,0.1,1.044e-06 ± 5.8e-07,7.223e-05 ± 4.1e-05,0,0,False
+Adam,Taylor3,0.1,1.059e-06 ± 6e-07,7.158e-05 ± 4e-05,0,0,False
+Adam,Padé2,0.01,1.332e-05 ± 9.1e-06,0.0009183 ± 0.00057,0,0,False
+Adam,Padé3,0.1,1.063e-06 ± 6e-07,7.511e-05 ± 4.2e-05,0,0,False
+Muon,Flat LR,0.1,0.0002212 ± 0.00011,0.0002212 ± 0.00011,0,0,False
+Muon,Taylor2,0.1,5.608e-07 ± 2.8e-07,8.034e-05 ± 3.2e-05,0,0,False
+Muon,Taylor3,0.1,1.218e-06 ± 1.4e-06,7.428e-05 ± 4.5e-05,0,0,False
+Muon,Padé2,0.1,0.00279 ± 0.0022,0.002429 ± 0.00083,0,0,False
+Muon,Padé3,0.1,0.001693 ± 0.0013,0.001731 ± 0.00097,0,0,False

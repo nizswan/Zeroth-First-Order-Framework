@@ -64,7 +64,6 @@ DEFAULTS = dict(
     lr=5e-6,
     bound=10.0,
     perturbation_scale=1e-3,
-    search_type="optimizer_displacement",
     search_inside="auto",
     temperature=0.8,
     top_p=0.95,
@@ -162,7 +161,6 @@ def parser():
         "lr": "AdamW learning rate; MeZO rate; Muon auxiliary AdamW rate",
         "bound": "Dimensionless search radius multiplier beta",
         "perturbation_scale": "Parameter-space probe length epsilon; MeZO Gaussian noise scale",
-        "search_type": "Coordinate representation for ZFO and ZFO-Seq",
         "search_inside": "auto preserves historical behavior; true adds stationary points; false forces model endpoints",
         "temperature": "Training sampling temperature",
         "top_p": "Training nucleus threshold",
@@ -211,7 +209,6 @@ def parser():
             "folio",
             "codah",
         ],
-        "search_type": ["optimizer_displacement", "normalized_direction"],
         "search_inside": ["auto", "true", "false"],
         "lr_type": ["constant", "warmup_cosine"],
         "initial_model": ["t2", "t3", "p2", "p3"],
@@ -268,6 +265,13 @@ def resolve(args):
     config = dict(DEFAULTS)
     if args.config:
         saved = json.loads(Path(args.config).read_text())
+        # Earlier local configs included a redundant coordinate-mode setting.
+        if saved.pop("search_type", "optimizer_displacement") != "optimizer_displacement":
+            raise ValueError(
+                "Saved search_type is no longer supported. Replay with its original "
+                "source, or remove search_type to explicitly adopt the current "
+                "multiplier selector; numerical decisions may differ."
+            )
         unknown = set(saved) - set(DEFAULTS)
         if unknown:
             raise ValueError(f"Unknown configuration fields: {sorted(unknown)}")
@@ -392,8 +396,6 @@ def validate(c):
         raise ValueError("This baseline requires lr_type=constant")
     if c["search_inside"] not in {"auto", "true", "false"}:
         raise ValueError("search_inside must be auto/true/false")
-    if c["search_type"] not in {"optimizer_displacement", "normalized_direction"}:
-        raise ValueError("Invalid search_type")
 
 
 def suite_configs(suite):
@@ -865,11 +867,9 @@ def train(config, directory, *, components=None):
                             f0=f0,
                             d1=d1,
                             dnorm=dnorm,
-                            lr=lr_used,
                             method=method,
                             bound=config["bound"],
                             epsilon=config["perturbation_scale"],
-                            search_type=config["search_type"],
                             search_inside=config["search_inside"],
                             k=config["k"],
                             initial_model=config["initial_model"],
@@ -1030,19 +1030,17 @@ def self_test():
         phi, phi0=phi(0), d1=0.8, dalpha=0.01, beta=1.0, k=5, initial_model="p3"
     )
     assert seq.probes_used == 5 and phi(seq.selected_a) >= phi(0)
-    for kind in ("optimizer_displacement", "normalized_direction"):
-        a, info = zfo.select_step(
-            phi,
-            f0=phi(0),
-            d1=0.8,
-            dnorm=2.0,
-            lr=0.1,
-            method="taylor2",
-            bound=1.0,
-            epsilon=0.01,
-            search_type=kind,
-        )
-        assert abs(a - 0.4) < 1e-10 and info["n_extra_forwards"] == 2
+    a, info = zfo.select_step(
+        phi,
+        f0=phi(0),
+        d1=0.8,
+        dnorm=2.0,
+        method="taylor2",
+        bound=1.0,
+        epsilon=0.01,
+    )
+    assert abs(a - 0.4) < 1e-10 and info["n_extra_forwards"] == 2
+    assert info["radius"] == 2.0 and info["dalpha"] == 0.005
     p = torch.nn.Parameter(torch.tensor([1.0]))
     opt = torch.optim.AdamW([p], lr=0.1)
     schedule = baselines.build_scheduler(
@@ -1058,7 +1056,7 @@ def self_test():
         for s in ("table1", "table2", "table10", "table11", "muon")
     ] == [216, 60, 48, 3, 24]
     print(
-        "Checks passed: ASDiv separation, endpoints/interiors, radius coordinates, sequential budget, cosine schedule, and paper grids."
+        "Checks passed: ASDiv separation, endpoints/interiors, probe spacing and radius, sequential budget, cosine schedule, and paper grids."
     )
 
 

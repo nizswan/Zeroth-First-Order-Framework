@@ -1,0 +1,27 @@
+{
+  "source_pdf": "figures/zfo-perturbed-median-convergence.pdf",
+  "source_pdf_sha256": "7b7427ce2bdee48c6d930fd204227f8cd1d0d8745dae674890f2db0c8f6ea7cf",
+  "source_notebook": "additional_zfo_optimization.ipynb",
+  "source_cells": [
+    13,
+    14,
+    20
+  ],
+  "initialization": "theta0 + independent N(0, 0.04 I); std=0.2",
+  "seeds": [
+    7,
+    11,
+    23
+  ],
+  "updates": 100,
+  "aggregation": "median of per-seed log10 objectives, as saved in the existing vector PDF",
+  "provenance": "Recovered existing vector path ordinates using the exact axis limits in source notebook cell 20; no training rerun, no raster digitization, no smoothing.",
+  "precision": "Limited by PDF coordinate serialization; approximately 4e-8 in log10 objective.",
+  "selected_tasks_unclipped": true,
+  "beta": 3,
+  "epsilon": 0.001,
+  "learning_rate_grid": "{1,2,5} x 10^k, k=-5,...,0 (18 points per method/task)",
+  "tuning": "Independent median-final-log-objective selection on the same three seeds as reporting.",
+  "source_failure_policy": "Original plotting code carries the last observed objective forward after early termination. A median is not a guarantee of seedwise stability.",
+  "raw_seed_histories_available": false
+}

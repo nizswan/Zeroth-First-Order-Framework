@@ -1,0 +1,16 @@
+Base,Selector,LR,Final loss ± SD,Equal-work loss ± SD,Failed seeds,Grid edge
+SGD,Flat LR,0.01,0.2868 ± 0.041,0.2868 ± 0.041,0,False
+SGD,Taylor2,0.01,0.2575 ± 0.032,0.2746 ± 0.022,0,False
+SGD,Taylor3,0.01,0.2575 ± 0.032,0.2746 ± 0.022,0,False
+SGD,Padé2,0.01,0.2575 ± 0.032,0.2746 ± 0.022,0,False
+SGD,Padé3,0.01,0.2575 ± 0.032,0.2747 ± 0.022,0,False
+Adam,Flat LR,0.01,0.2515 ± 0.024,0.2515 ± 0.024,0,False
+Adam,Taylor2,0.01,0.2477 ± 0.031,0.2494 ± 0.022,0,False
+Adam,Taylor3,0.01,0.2477 ± 0.031,0.2494 ± 0.022,0,False
+Adam,Padé2,0.01,0.2474 ± 0.031,0.25 ± 0.022,0,False
+Adam,Padé3,0.01,0.2477 ± 0.031,0.2494 ± 0.022,0,False
+Muon,Flat LR,0.1,0.253 ± 0.014,0.253 ± 0.014,0,False
+Muon,Taylor2,0.01,0.2858 ± 0.039,0.4058 ± 0.033,0,False
+Muon,Taylor3,0.01,0.2858 ± 0.039,0.4058 ± 0.033,0,False
+Muon,Padé2,0.01,0.2833 ± 0.041,0.4085 ± 0.035,0,False
+Muon,Padé3,0.01,0.2858 ± 0.039,0.4058 ± 0.033,0,False
