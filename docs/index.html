@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ZFO: reusable Taylor and Padé step selection for PyTorch optimizers. Explore the library and configure ZFO for your existing training loop.">
+  <meta name="theme-color" content="#f4f3ed">
+  <title>ZFO — A better look along your next step</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20261021-legend-row">
+  <script src="playground-core.js?v=20261021-playground" defer></script>
+  <script src="site.js?v=20261021-playground-clean" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header wrap">
+  <div class="brand"><span class="brand-mark">ZFO</span><span class="brand-name">Zeroth and First Order Optimization</span></div>
+  <nav aria-label="Main navigation">
+    <a href="assets/paper.pdf" target="_blank" rel="noopener">Paper</a>
+    <a href="https://arxiv.org/abs/2610.02190">arXiv</a>
+    <a href="https://github.com/nizswan/Zeroth-First-Order-Framework">GitHub</a>
+  </nav>
+</header>
+<main id="main">
+  <section class="hero wrap">
+    <div>
+      <h1>Your optimizer picks<br>the direction.<br><em>ZFO picks the step.</em></h1>
+      <p class="hero-copy">Keep the update rule you know. Explore how Taylor and Padé models can choose how far to move with code and experiments you can inspect.</p>
+    </div>
+    <figure class="hero-visual">
+      <div class="visual-caption"><span>FROM LANDSCAPE TO LINE</span><span>nD → 2D</span></div>
+      <picture>
+        <source media="(max-width: 600px)" srcset="assets/hero-direction-step-mobile.svg" width="380" height="740">
+        <img class="hero-landscape" src="assets/hero-direction-step.svg" width="680" height="390" alt="A 3D loss surface sliced along the optimizer direction unfolds into a 2D loss curve. Two probes fit a local model; the base optimizer and ZFO select different steps along the same line.">
+      </picture>
+    </figure>
+  </section>
+
+  <section id="library" class="section wrap">
+    <div class="section-heading"><div><h2>A few settings.<br>Your existing training loop.</h2></div><p>Wrap an optimizer, pass a fixed-batch loss, and keep your usual learning-rate scheduler. Data loading and batch size stay in your code.</p></div>
+    <div class="configuration">
+      <form id="configuration" class="controls" aria-label="ZFO configuration builder">
+        <div class="control-title"><h3>Configure ZFO</h3></div>
+        <div class="field-row"><label>Base optimizer<select id="base"><option>Adam</option><option>SGD</option><option>AdamW</option><option>Muon</option><option>TACO</option></select></label><label>Learning rate<input id="lr" type="number" min="0" max="100" step="any" value="0.01" required></label></div>
+        <label>Local model<select id="method"><option value="taylor2">Taylor2</option><option value="taylor3">Taylor3</option><option value="pade2">Padé2 · [1/1]</option><option value="pade3">Padé3 · [1/2]</option><option value="pade3_21">Padé3 · [2/1]</option></select></label>
+        <div class="field-row"><label>Probe distance ε<input id="epsilon" type="number" min="0.000000001" step="any" value="0.001" required></label><label>Region multiplier β<input id="beta" type="number" min="0.000001" max="100" step="any" value="1" required></label></div>
+        <label>Interior search<select id="interior"><option value="auto">Auto</option><option value="true">Enabled</option><option value="false">Disabled</option></select></label>
+      </form>
+      <div class="code-panel"><div class="code-toolbar"><span>zfo_training.py</span><button id="copy-code" type="button">Copy code <span aria-hidden="true">⧉</span></button></div><pre><code id="config-code"></code></pre></div>
+    </div>
+    <section class="step-story" aria-labelledby="step-story-title">
+      <div class="step-story-heading"><div><h3 id="step-story-title">Same direction.<br>A better-sized step.</h3></div><p>Your optimizer points the way. ZFO looks along that line and chooses how far to go.</p></div>
+      <div class="step-frame">
+        <div class="step-explanation">
+          <p class="step-equation">θ<sub>next</sub> = θ + s z</p>
+          <dl class="step-definitions">
+            <div><dt>z</dt><dd><strong>The direction</strong><span>Your optimizer gives a direction g. Use its unit direction z.</span></dd></div>
+            <div><dt>s</dt><dd><strong>The distance</strong><span>ZFO chooses how far to move along z, with 0 ≤ s ≤ R.</span></dd></div>
+            <div><dt>R</dt><dd><strong>The limit</strong><span>The usual step is s<sub>FO</sub> = α‖g‖. ZFO can search up to R = β s<sub>FO</sub>.</span></dd></div>
+          </dl>
+          <p class="step-footnote">β sets how far ZFO can search relative to the usual first-order update. Values above 1 let it look beyond that update.</p>
+        </div>
+        <figure class="step-figure">
+          <div class="step-figure-label"><span>A LOOK ALONG THE LINE</span><span>φ(s) = F(θ + s z)</span></div>
+          <svg viewBox="0 0 560 340" role="img" aria-labelledby="step-figure-title step-figure-desc">
+            <title id="step-figure-title">Choose a distance along one direction</title>
+            <desc id="step-figure-desc">Illustrative loss-minimization example. The local model chooses a step s star between the usual optimizer step s FO and the search limit R. The actual objective can differ from the model prediction.</desc>
+            <rect x="54" y="40" width="450" height="216" rx="10" fill="#edf1e7"/>
+            <text x="70" y="65" class="plot-small">Loss</text>
+            <path d="M54 93C155 166 233 225 324 212S445 160 504 126" class="story-actual"/>
+            <path d="M54 93C155 185 245 226 324 226S445 182 504 150" class="story-fit"/>
+            <path d="M204 164V256 M324 226V256" class="story-guide"/>
+            <path d="M54 256H504" class="story-axis"/>
+            <circle cx="54" cy="93" r="5" fill="#173e37"/>
+            <circle cx="324" cy="226" r="7" fill="#a54b29" stroke="#fffef9" stroke-width="3"/>
+            <path d="M324 138V206" class="story-callout-line"/>
+            <rect x="260" y="96" width="128" height="42" rx="21" fill="#173e37"/>
+            <text x="324" y="122" text-anchor="middle" class="story-callout">ZFO step</text>
+            <g text-anchor="middle" class="story-tick"><text x="54" y="282">0</text><text x="204" y="282">s<tspan baseline-shift="sub" font-size="11">FO</tspan></text><text x="324" y="282">s*</text><text x="504" y="282">R</text></g>
+            <g text-anchor="middle" class="plot-small"><text x="54" y="308">Start</text><text x="204" y="308">Usual step</text><text x="504" y="308">Limit</text></g>
+          </svg>
+          <figcaption><span><i class="actual-swatch"></i>Objective</span><span><i class="fit-swatch"></i>Local model</span></figcaption>
+        </figure>
+      </div>
+    </section>
+  </section>
+
+  <section id="playground" class="playground-section section wrap" aria-labelledby="playground-title">
+    <div class="playground-heading"><div><p class="section-kicker">TRY A FUNCTION</p><h2 id="playground-title">See the fit.<br>Compare the steps.</h2></div><p>Start at any x. Give ZFO a function and see how four local models choose the next point.</p></div>
+    <div class="playground-frame">
+      <form id="function-form" class="function-form" aria-label="Function playground">
+        <label class="function-field" for="function-expression">Your function</label>
+        <div class="function-input"><span aria-hidden="true">f(x) =</span><input id="function-expression" value="x^2 + 0.4*sin(3*x)" maxlength="240" spellcheck="false" autocomplete="off" aria-describedby="function-help" required></div>
+        <p id="function-help">Use + − * / ^, parentheses, sin, cos, tan, exp, log, sqrt, pi, and e. Write multiplication as 2*x.</p>
+        <div class="function-presets" aria-label="Example functions"><span>Try:</span><button type="button" data-example="wave">Wavy bowl</button><button type="button" data-example="quadratic">Quadratic</button><button type="button" data-example="exponential">Exponential</button></div>
+        <div class="function-settings">
+          <label>Starting point x<input id="function-x" type="number" step="any" value="1.2" min="-1000000" max="1000000" required></label>
+          <label>Goal<select id="function-goal"><option value="min">Minimize</option><option value="max">Maximize</option></select></label>
+          <label>Learning rate α<input id="function-lr" type="number" step="any" value="0.2" min="0.000001" max="100" required></label>
+          <label>Search multiplier β<input id="function-beta" type="number" step="any" value="2" min="0.000001" max="100" required></label>
+          <label>Probe distance ε<input id="function-epsilon" type="number" step="any" value="0.1" min="0.00001" max="10" required></label>
+        </div>
+        <div class="function-submit"><button class="button primary" type="submit">Compare fits <span aria-hidden="true">↗</span></button><p>One gradient step in one dimension. All four fits use the same starting value, slope, and two probes.</p></div>
+      </form>
+      <p id="function-error" class="function-error" role="alert" hidden></p>
+      <div id="function-results" class="function-results">
+        <div id="function-summary" class="function-summary" aria-live="polite"></div>
+        <div class="fit-chart-heading"><div><h3>Along your next step</h3><p id="function-chart-caption"></p></div><div id="function-legend" class="function-legend" aria-label="Plot legend"></div></div>
+        <div id="function-chart" class="function-chart"></div>
+        <p class="fit-chart-help">Solid curve: your function. Dashed curves: local fits. Dots: actual values at the selected points. Select a method below to highlight its fit.</p>
+        <div id="function-methods" class="function-methods"></div>
+        <p id="function-notes" class="function-notes"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="research" class="section wrap next-step">
+    <div><h2>Try it on your own problem.</h2><p>The examples show how to add ZFO to a supervised training loop. Start there, choose a base optimizer, and compare the result with your usual setup.</p><a class="button primary" href="https://github.com/nizswan/Zeroth-First-Order-Framework">Get the code <span aria-hidden="true">↗</span></a></div>
+  </section>
+
+</main>
+<footer class="wrap"><div class="brand"><span class="brand-mark">ZFO</span></div><span>Zeroth and First Order Optimization</span></footer>
+<div id="copy-status" class="sr-only" role="status"></div>
+</body>
+</html>
