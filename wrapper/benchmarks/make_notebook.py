@@ -34,7 +34,7 @@ Full protocol: [benchmarks/README.md](../benchmarks/README.md).
 
 The saved outputs are real executed runs. To recompute optimization, run
 `python -m benchmarks.suite --output benchmarks/results/new_run --seeds 3`
-from the repository root and update `RESULTS` below. Re-executing this notebook
+from the `wrapper/` directory and update `RESULTS` below. Re-executing this notebook
 only regenerates analysis from the specified saved evidence."""),
              code(f"""from pathlib import Path
 import sys

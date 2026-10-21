@@ -1,13 +1,13 @@
 # Use ZFO in a training loop
 
 Install directly with
-`python -m pip install "git+https://github.com/nizswan/Zeroth-First-Order-Framework.git"`,
+`python -m pip install "git+https://github.com/nizswan/Zeroth-First-Order-Framework.git#subdirectory=wrapper"`,
 or from a checkout with `python -m pip install -e .`. Requires Python 3.10+
 and PyTorch 2.9+. The package is
 named `zeroth-first-order`; the public import is `from ZFO import ZFO` (or
 `import ZFO` followed by `ZFO.ZFO(...)`). No PyPI release is implied.
 The only core dependency is PyTorch. LLM reproduction dependencies remain in
-the separate `requirements.txt`.
+[`paper/requirements.txt`](../../paper/requirements.txt).
 
 ```python
 import torch
@@ -87,7 +87,7 @@ recover coordinates rounded away. This effect is not specific to AdamW;
 its magnitude depends on the update, parameter values, and precision. The
 adapter requires float32/float64 parameter storage; the original LLM path
 also supports BF16/FP16. Absolute selector thresholds and probe arithmetic
-can additionally change numerical decisions. See the [repository explanation](../README.md#search-interval-and-the-roles-of-lr-and-bound).
+can additionally change numerical decisions. See the [repository explanation](../../paper/README.md#search-interval-and-the-roles-of-lr-and-bound).
 
 Older default checkpoints load normally. A checkpoint requesting the removed
 alternate coordinate mode is rejected before loading optimizer state; use its
@@ -119,7 +119,7 @@ flag reports a numerical model fallback, not a successful acceptance test.
 - Differentiable fixed-rollout policy objectives can use the same interface.
   Return the **negative** reward surrogate for a minimizing optimizer, or use
   a maximizing optimizer. Rewards, rollout sampling, and KL construction remain
-  caller responsibilities. The existing `run.py` remains the LLM reproduction path.
+  caller responsibilities. The existing [`paper/run.py`](../../paper/run.py) remains the LLM reproduction path.
 
 This first adapter does not implement AMP/GradScaler, distributed/sharded
 training, compiled/captured steps, sparse gradients, LBFGS, or gradient

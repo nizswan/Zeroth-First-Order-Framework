@@ -16,9 +16,11 @@ probe work.
 ```bash
 python -m pip install -e '.[bench,test]'
 python -m benchmarks.suite --output benchmarks/results/my_run --steps 100 --seeds 3
-python -m benchmarks.report benchmarks/results/my_run --site docs
+python -m benchmarks.report benchmarks/results/my_run --site ../website
 python -m benchmarks.make_notebook --results benchmarks/results/my_run
 ```
+
+Run these commands from `wrapper/`.
 
 The suite refuses to overwrite an existing manifest. Use a fresh directory for
 each run. `--seeds 5` expands both tuning and reporting cohorts to five. For a

@@ -288,9 +288,6 @@ def select_step(
     bound,
     epsilon,
     search_inside="auto",
-    k=5,
-    initial_model="p3",
-    tol=None,
 ):
     """Return a multiplier of the realized optimizer displacement.
 
@@ -304,30 +301,6 @@ def select_step(
         return 0.0, {"dnorm": dnorm, "n_extra_forwards": 0, "fallback": 1}
     radius = bound * dnorm
     probe_spacing = epsilon / dnorm
-    if method == "zfo_seq":
-        from baselines import select_zfo_seq
-
-        result = select_zfo_seq(
-            phi,
-            phi0=f0,
-            d1=d1,
-            dalpha=probe_spacing,
-            beta=bound,
-            k=k,
-            initial_model=initial_model,
-            tol=tol,
-            search_inside=search_inside,
-        )
-        return result.selected_a, {
-            "dnorm": dnorm,
-            "radius": radius,
-            "n_extra_forwards": result.probes_used,
-            "fallback": int(result.fallback),
-            "safeguard": int(result.safeguard),
-            "initial_proposal_a": result.initial_proposal,
-            "evaluated_pairs_a": [[a, v] for a, v in result.evaluated],
-            **(result.details or {}),
-        }
     fp, fm = phi(probe_spacing), phi(-probe_spacing)
     if not all(math.isfinite(v) for v in (f0, fp, fm)):
         raise FloatingPointError("Non-finite fixed-batch probe")

@@ -8,7 +8,7 @@ from pathlib import Path
 from math import sqrt
 import xml.etree.ElementTree as ET
 
-OUT = Path(__file__).resolve().parents[1] / 'docs/assets/hero-direction-step.svg'
+OUT = Path(__file__).resolve().parents[1] / 'assets/hero-direction-step.svg'
 # Reuse the paper illustration's physical ray coordinate s internally.
 # Website labels use the displacement multiplier a = s / BASE, so the
 # base optimizer is exactly a=1 and the endpoint is beta=BOUND/BASE.

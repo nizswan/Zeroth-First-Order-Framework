@@ -12,7 +12,7 @@ dependencies = ["torch>=2.9"]
 
 [project.urls]
 Repository = "https://github.com/nizswan/Zeroth-First-Order-Framework"
-Documentation = "https://github.com/nizswan/Zeroth-First-Order-Framework/blob/main/docs/library.md"
+Documentation = "https://github.com/nizswan/Zeroth-First-Order-Framework/blob/main/wrapper/docs/library.md"
 Issues = "https://github.com/nizswan/Zeroth-First-Order-Framework/issues"
 
 [project.optional-dependencies]

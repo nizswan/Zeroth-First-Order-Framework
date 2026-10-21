@@ -1,4 +1,4 @@
-include README.md requirements.txt run.py zfo.py baselines.py prep.py
+include README.md
 include docs/library.md
 recursive-include examples *.py
 recursive-include tests *.py

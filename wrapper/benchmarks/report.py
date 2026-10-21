@@ -176,6 +176,6 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("results")
-    parser.add_argument("--site", default="docs")
+    parser.add_argument("--site", default="../website")
     args = parser.parse_args()
     export(args.results, args.site)

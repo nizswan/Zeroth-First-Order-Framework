@@ -1,3 +1,0 @@
-# Preserve plot-generator output without reporting SVG path indentation as errors.
-docs/assets/atlas/*.svg -whitespace linguist-generated=true
-docs/assets/classical/*.svg -whitespace linguist-generated=true

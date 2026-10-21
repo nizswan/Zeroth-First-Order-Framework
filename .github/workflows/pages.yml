@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['docs/**', 'tests/test_site_playground.cjs', '.github/workflows/pages.yml']
+    paths: ['website/**', '.github/workflows/pages.yml']
 permissions:
   contents: read
   pages: write
@@ -24,12 +24,12 @@ jobs:
           node-version: 22
       - name: Check the function playground
         run: |
-          node --check docs/site.js
-          node --test tests/test_site_playground.cjs
+          node --check website/site.js
+          node --test website/tests/test_site_playground.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: docs
+          path: website
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

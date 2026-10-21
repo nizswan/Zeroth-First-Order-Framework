@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { parseExpression, compare, fitModels } = require('../docs/playground-core.js');
+const { parseExpression, compare, fitModels } = require('../playground-core.js');
 const close = (a, b, tolerance = 1e-8) => assert.ok(Math.abs(a - b) <= tolerance * Math.max(1, Math.abs(b)), `${a} != ${b}`);
 const settings = { expression: '(x - 1)^2', x: 3, lr: .5, beta: 2, epsilon: .1, goal: 'min' };
 

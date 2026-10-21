@@ -1,6 +1,6 @@
 """Restyle saved evidence for the website; no training, tuning, or smoothing.
 
-Run from the repository root: python -m benchmarks.site_figures
+Run from the repository root: python website/scripts/site_figures.py
 The earlier six-problem experiment has its own cached data and provenance.
 """
 from pathlib import Path
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / "docs/assets"
+ASSETS = ROOT / "assets"
 COLORS = ["#59645f", "#2c6685", "#367447", "#b16b28", "#885a93", "#ba4b40"]
 METHODS = ["flat", "taylor2", "taylor3", "pade2", "pade3"]
 plt.rcParams.update({"font.size": 11, "axes.labelsize": 11, "xtick.labelsize": 10,
@@ -62,7 +62,7 @@ def classical():
 
 
 def atlas():
-    source = ROOT / "benchmarks/results/reference"
+    source = ROOT.parent / "wrapper/benchmarks/results/reference"
     manifest = json.loads((source / "manifest.json").read_text())
     assert manifest["status"] == "complete"
     curves = pd.read_csv(source / "curves.csv")

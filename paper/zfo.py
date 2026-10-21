@@ -75,5 +75,42 @@ from ZFO._search import (
     _maximize_pade_12,
     _real_roots,
     select_model,
-    select_step,
+    select_step as _select_step,
 )
+
+
+def select_step(phi, *, f0, d1, dnorm, method, bound, epsilon,
+                search_inside="auto", k=5, initial_model="p3", tol=None):
+    """Use shared local models, or the paper's sequential-search baseline."""
+    if not math.isfinite(dnorm) or not math.isfinite(d1):
+        raise FloatingPointError("Non-finite optimizer direction or derivative")
+    if dnorm < 1e-20:
+        return 0.0, {"dnorm": dnorm, "n_extra_forwards": 0, "fallback": 1}
+    radius = bound * dnorm
+    probe_spacing = epsilon / dnorm
+    if method == "zfo_seq":
+        from baselines import select_zfo_seq
+
+        result = select_zfo_seq(
+            phi,
+            phi0=f0,
+            d1=d1,
+            dalpha=probe_spacing,
+            beta=bound,
+            k=k,
+            initial_model=initial_model,
+            tol=tol,
+            search_inside=search_inside,
+        )
+        return result.selected_a, {
+            "dnorm": dnorm,
+            "radius": radius,
+            "n_extra_forwards": result.probes_used,
+            "fallback": int(result.fallback),
+            "safeguard": int(result.safeguard),
+            "initial_proposal_a": result.initial_proposal,
+            "evaluated_pairs_a": [[a, v] for a, v in result.evaluated],
+            **(result.details or {}),
+        }
+    return _select_step(phi, f0=f0, d1=d1, dnorm=dnorm, method=method,
+                        bound=bound, epsilon=epsilon, search_inside=search_inside)

@@ -5,7 +5,7 @@ import pytest
 import torch
 
 from ZFO import ZFO
-from zfo import select_step
+from ZFO._search import select_step
 
 
 @pytest.mark.parametrize("method", ZFO.METHODS)

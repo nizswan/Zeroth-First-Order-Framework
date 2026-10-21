@@ -178,7 +178,7 @@ def run_suite(output, *, tasks=None, steps=100, seeds=3, beta=3.0, epsilon=1e-3,
     if (output / "manifest.json").exists():
         raise FileExistsError("Choose a fresh output directory; saved evidence is never silently overwritten")
     root = Path(__file__).resolve().parents[1]
-    sources = ["zfo.py", "ZFO/_search.py", "ZFO/optimizer.py", "benchmarks/tasks.py", "benchmarks/suite.py"]
+    sources = ["ZFO/_search.py", "ZFO/optimizer.py", "benchmarks/tasks.py", "benchmarks/suite.py"]
     source_bytes = {f: (root / f).read_bytes() for f in sources}
     for filename, content in source_bytes.items():
         snapshot = output / "sources" / filename
