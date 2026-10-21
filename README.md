@@ -1,4 +1,60 @@
-# ZFO experiment package
+# ZFO: Zeroth and First-Order Optimization
+
+<p align="center">
+  <a href="https://nizswan.github.io/Zeroth-First-Order-Framework/">
+    <img src="https://img.shields.io/badge/Project-Website-173e37?style=for-the-badge" alt="Project Website">
+  </a>
+  <a href="https://nizswan.github.io/Zeroth-First-Order-Framework/assets/paper.pdf">
+    <img src="https://img.shields.io/badge/Paper-PDF-a54b29?style=for-the-badge" alt="Paper PDF">
+  </a>
+  <a href="https://arxiv.org/abs/2610.02190">
+    <img src="https://img.shields.io/badge/arXiv-2610.02190-b31b1b?style=for-the-badge" alt="arXiv">
+  </a>
+</p>
+
+<p align="center">
+  <strong>Your optimizer picks the direction. ZFO picks the step.</strong>
+</p>
+
+<p align="center">
+  If you find ZFO useful, please give the project a ⭐ on GitHub!
+</p>
+
+<p align="center">
+  <a href="https://github.com/nizswan/Zeroth-First-Order-Framework">
+    <img src="https://img.shields.io/badge/Support%20ZFO-Star%20on%20GitHub-173e37?style=for-the-badge&logo=github" alt="Support ZFO — Star on GitHub">
+  </a>
+</p>
+
+---
+
+## Overview
+
+ZFO separates two decisions in optimization: **which direction to move** and
+**how far to go**. A first-order optimizer supplies the direction. Taylor or
+Padé models use local information along that direction to choose a step within
+a bounded search interval.
+
+**[Explore the project website →](https://nizswan.github.io/Zeroth-First-Order-Framework/)**
+Read the visual introduction, configure ZFO, or enter your own function in the
+interactive playground to compare Taylor and Padé fits.
+
+| Resource | What you will find |
+| --- | --- |
+| [Project website](https://nizswan.github.io/Zeroth-First-Order-Framework/) | Method overview, configuration builder, and interactive function playground |
+| [Paper](https://nizswan.github.io/Zeroth-First-Order-Framework/assets/paper.pdf) | Methodology, analysis, experiments, and appendices |
+| [Usage and hyperparameters](#usage-and-hyperparameters) | Methods, search conventions, defaults, and command-line options |
+| [Reproducing the experiments](#reproducing-the-experiments) | Installation, paper configurations, run commands, and result aggregation |
+| [Implementation fidelity and limits](#implementation-fidelity-and-limits) | Preserved implementation details, differences between objectives, and reproduction limits |
+
+> **Reproduction scope.** This is an executable experiment package with preserved
+> default numerical logic and explicit settings, not a certification that fresh
+> runs will match the published means. The full implementation notes and
+> limitations are retained below; read them before interpreting reproduction results.
+
+---
+
+## Experiment package
 
 A self-contained command-line package for the large-model experiments: four ZFO
 local models, AdamW, AdamW with cosine decay, Prodigy, MeZO, ZFO-Seq, and Muon.
