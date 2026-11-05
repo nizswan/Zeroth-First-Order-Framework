@@ -65,12 +65,19 @@ def _maximize_pade_11(
     f0: float, d1: float, d2: float, bound: float
 ) -> Tuple[float, Dict[str, float], bool]:
     info: Dict[str, float] = {}
-    if abs(d1) < 1e-12:
-        return (float(bound), info, True)
+    if not all(math.isfinite(v) for v in (f0, d1, d2, bound)) or abs(d1) < 1e-12:
+        return (0.0, info, False)
     a0 = f0
     b1 = -d2 / (2.0 * d1)
     a1 = d1 + a0 * b1
     info.update({"pade_a0": float(a0), "pade_a1": float(a1), "pade_b1": float(b1)})
+    if not all(math.isfinite(v) for v in info.values()):
+        return (0.0, {}, False)
+    # The linear denominator starts at 1, so a nonpositive endpoint implies
+    # a pole; also reject near-zero endpoints before evaluating candidates.
+    denb = 1.0 + b1 * float(bound)
+    if not math.isfinite(denb) or denb < 1e-09:
+        return (0.0, info, False)
 
     def q(a: float) -> float:
         den = 1.0 + b1 * a
